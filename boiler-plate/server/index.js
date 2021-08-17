@@ -9,7 +9,7 @@ const { RefreshToken } = require('./modles/RefreshToken')
 const { User } = require('./modles/User')
 
 const app = express()
-const port = 3000
+const port = 6000
 app.use(cookieParser())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
@@ -22,6 +22,10 @@ mongoose.connect(config.mongoURI, {
 
 app.get('/', (req, res) => {
   res.send('Hello World!')
+})
+
+app.get('/api/hello', (req, res) => {
+  res.send('hello api')
 })
 
 // 회원가입
