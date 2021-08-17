@@ -1,19 +1,20 @@
 const express = require('express')
-const app = express()
-const port = 3000
-const config = require('./config/key');
 const cookieParser = require('cookie-parser')
+const mongoose = require('mongoose')
+
+const config = require('./config/key')
 const { auth } = require('./middleware/auth')
 const { refresh } = require('./middleware/auth')
-const { User } = require('./modles/User');
+const { RefreshToken } = require('./modles/RefreshToken')
+const { User } = require('./modles/User')
 
-
+const app = express()
+const port = 3000
 app.use(cookieParser())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
 
-const mongoose = require('mongoose')
 mongoose.connect(config.mongoURI, {
   useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true, useFindAndModify: true
 }).then(() => console.log('MongoDB Connected!'))
@@ -79,7 +80,7 @@ app.get('/api/users/auth', auth, (req, res) => {
 })
 
 // 토큰 Refresh
-app.put('/api/users/refresh', refresh, (req, res) => {
+app.post('/api/users/refresh', refresh, (req, res) => {
   // 미들웨어에서 auth 처리, not error, not return -> auth success
   res.status(200)
     .cookie('__sid', req.user.token, { 'httpOnly': true })
@@ -92,9 +93,17 @@ app.put('/api/users/refresh', refresh, (req, res) => {
 
 // 로그아웃
 app.get('/api/users/logout', auth, (req, res) => {
-  User.findOneAndUpdate({ _id: req.user._id }, { token: "" }, (err, user) => {
+  User.findOne({ _id: req.user._id }, (err, user) => {
     if (err) return res.json({ success: false, err })
-    return res.status(200).json({ success: true })
+    RefreshToken.findOneAndDelete({ _id: user.token }, () => {
+      user.token = ""
+      user.save((err) => {
+        if (err) return res.json({ success: false, err })
+
+        res.clearCookie('__sid')
+        return res.status(200).json({ success: true })
+      })
+    })
   })
 })
 
