@@ -1,38 +1,52 @@
-import React, { useEffect } from 'react'
-import axios from 'axios'
-import { useSelector } from 'react-redux'
+import React from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { withRouter } from 'react-router-dom'
+import { logoutUser } from '../../../_actions/user_action'
 
-function LandingPage() {
-    const userState = useSelector(state => state.user)
+function LandingPage(props) {
+    const user = useSelector(state => state.user)
+    const dispatch = useDispatch()
 
-    useEffect(() => {
-        axios.get('/api/hello')
-            .then(response => { console.log(response) })
-    }, [])
+    const onLoginClickHandler = () => {
+        props.history.push('/login')
+    }
 
-    const onClickHandler = () => {
-        const headers = {
-            'Authorization': 'Bearer ' + userState.loginSuccess.access_token
+    const onLogoutClickHandler = () => {
+        var token = ''
+
+        if ('loginSuccess' in user) {
+            token = user.loginSuccess.access_token
         }
-        console.log(headers)
-
-        axios.get('/api/users/logout', { headers })
+        dispatch(logoutUser(token))
             .then(response => {
-                console.log(response)
+                if (response.payload.success) {
+                    props.history.push('/login')
+                }
+                else {
+                    alert('로그아웃이 실패 하였습니다.')
+                }
             })
     }
 
     return (
         <div style={{
-            display: 'flex', justifyContent: 'center', alignItems: 'center',
+            display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center',
             width: '100%', height: '100vh'
         }}>
             <h2>시작 페이지</h2>
-            <button onClick={onClickHandler}>
-                로그아웃
-            </button>
+            {
+                'userData' in user && user.userData.isAuth ?
+                    <button onClick={onLogoutClickHandler}>
+                        로그아웃
+                    </button>
+                    :
+                    <button onClick={onLoginClickHandler}>
+                        로그인
+                    </button>
+            }
+
         </div>
     )
 }
 
-export default LandingPage
+export default withRouter(LandingPage)

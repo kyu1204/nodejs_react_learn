@@ -10,8 +10,8 @@ let auth = (req, res, next) => {
 
     // 토큰을 복호화
     User.findByToken(token, (err, user) => {
-        if (err) return res.status(401).json({ isAuth: false, error: true, message: err.message })
-        if (!user) return res.status(401).json({ isAuth: false, error: true, message: 'auth error' })
+        if (err) return res.json({ isAuth: false, error: true, message: err.message })
+        if (!user) return res.json({ isAuth: false, error: true, message: 'auth error' })
 
         req.token = token
         req.user = user
