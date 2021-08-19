@@ -25,3 +25,4 @@ boiler-plate/config/dev.js
 */*/yarn-debug.log*
 */*/yarn-error.log*
 
+.DS_Store
