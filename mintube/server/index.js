@@ -34,6 +34,7 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 app.use('/api/users', require('./routes/users'));
+app.use('/api/video', require('./routes/video'));
 
 
 //use this to show the image you have in node js server to client (react js)
@@ -53,7 +54,7 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
-const port = process.env.PORT || 6000
+const port = process.env.PORT || 12041
 
 app.listen(port, () => {
   console.log(`Server Listening on ${port}`)
