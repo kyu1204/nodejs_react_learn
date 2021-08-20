@@ -27,3 +27,4 @@ boiler-plate/config/dev.js
 
 .DS_Store
 mintube/uploads
+mintube/.vscode

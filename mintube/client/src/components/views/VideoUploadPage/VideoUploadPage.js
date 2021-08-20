@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { Typography, Button, Form, message, Input, Icon } from 'antd'
 import DropZone from 'react-dropzone'
-import axios from 'axios'
 import { useSelector } from 'react-redux'
+import Axios from 'axios'
 
 
 const { TextArea } = Input
@@ -55,7 +55,7 @@ function VideoUploadPage(props) {
         }
         formData.append("file", files[0])
 
-        axios.post('/api/video/uploadfiles', formData, { headers })
+        Axios.post('/api/video/uploadfiles', formData, { headers })
             .then(response => {
                 if (response.data.success) {
                     let variable = {
@@ -64,7 +64,7 @@ function VideoUploadPage(props) {
                     }
 
                     setFilePath(response.data.url)
-                    axios.post('/api/video/thumbnail', variable)
+                    Axios.post('/api/video/thumbnail', variable)
                         .then(response => {
                             if (response.data.success) {
                                 setDuration(response.data.fileDuration)
@@ -97,7 +97,7 @@ function VideoUploadPage(props) {
             thumbnail: ThumbnailPath
         }
 
-        axios.post('/api/video/uploadVideo', variable)
+        Axios.post('/api/video/uploadVideo', variable)
             .then(response => {
                 if (response.data.success) {
                     message.success('성공적으로 업로드를 완료했습니다.')

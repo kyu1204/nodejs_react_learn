@@ -80,4 +80,28 @@ router.post('/uploadVideo', (req, res) => {
     })
 })
 
+router.get('/getVideos', (req, res) => {
+
+    // 비디오 리스트를 반환
+    Video.find()
+        .populate('writer')
+        .exec((err, videos) => {
+            if (err)
+                return res.json({ success: false, err })
+            res.json({ success: true, videos })
+        })
+})
+
+router.get('/getVideoDetail', (req, res) => {
+
+    // 비디오 정보를 반환
+    Video.findOne({ "_id": req.query.videoId })
+        .populate('writer')
+        .exec((err, videoDetail) => {
+            if (err)
+                return res.json({ success: false, err })
+            res.json({ success: true, videoDetail })
+        })
+})
+
 module.exports = router;
