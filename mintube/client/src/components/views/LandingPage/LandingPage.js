@@ -12,7 +12,7 @@ function LandingPage() {
     const [Videos, setVideos] = useState([])
 
     useEffect(() => {
-        Axios.get('api/video/getVideos')
+        Axios.get('/api/video/getVideos')
             .then(response => {
                 if (response.data.success) {
                     setVideos(response.data.videos)
