@@ -1,8 +1,10 @@
 const express = require('express');
 const router = express.Router();
+const path = require('path')
 const { Video } = require("../models/Video");
 const { auth } = require("../middleware/auth");
 const multer = require('multer')
+const { Subscriber } = require('../models/Subscriber')
 var ffmpeg = require('fluent-ffmpeg')
 
 
@@ -12,7 +14,8 @@ let storage = multer.diskStorage({
         cb(null, 'uploads/')
     },
     filename: (req, file, cb) => {
-        cb(null, `${Date.now()}_${file.originalname}`)
+        const ext = path.extname(file.originalname)
+        cb(null, `${Date.now()}${ext}`)
     },
     fileFilter: (req, file, cb) => {
         const ext = path.extname(file.originalname)
@@ -101,6 +104,27 @@ router.get('/getVideoDetail', (req, res) => {
             if (err)
                 return res.json({ success: false, err })
             res.json({ success: true, videoDetail })
+        })
+})
+
+router.get('/getSubscriptionVideos', (req, res) => {
+
+    // 구독자 비디오 리스트를 반환
+    // 구독자 찾기
+    Subscriber.find({ userFrom: req.query.userFrom })
+        .exec((err, subscriberInfo) => {
+            let subscribedUser = []
+            subscriberInfo.map((subscriber, i) => {
+                subscribedUser.push(subscriber.userTo)
+            })
+
+            // 구독자의 비디오 찾기
+            Video.find({ writer: { $in: subscribedUser } })
+                .populate('writer')
+                .exec((err, videos) => {
+                    if (err) return res.status(200).json({ success: false, err })
+                    return res.status(200).json({ success: true, videos })
+                })
         })
 })
 

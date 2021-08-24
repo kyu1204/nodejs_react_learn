@@ -8,12 +8,6 @@ const { Subscriber } = require('../models/Subscriber')
 //=================================
 
 
-router.get('/subscribeNumber', (req, res) => {
-
-    // 구독자 정보를 반환
-
-})
-
 router.get('/subscribeInfo', (req, res) => {
 
     Subscriber.find({ 'userTo': req.query.userTo })

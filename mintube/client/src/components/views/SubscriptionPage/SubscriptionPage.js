@@ -1,16 +1,22 @@
 import React, { useEffect, useState } from 'react'
-import { Card, Avatar, Col, Row } from 'antd'
+import { Card, Avatar, Col, Typography, Row } from 'antd'
 import Axios from 'axios';
 import moment from 'moment'
 
+const { Title } = Typography
 const { Meta } = Card
 
-function LandingPage() {
+function SubscriptionPage(props) {
 
     const [Videos, setVideos] = useState([])
 
     useEffect(() => {
-        Axios.get('/api/video/getVideos')
+
+        const queryParams = {
+            userFrom: localStorage.getItem('userId')
+        }
+
+        Axios.get('/api/video/getSubscriptionVideos', { params: queryParams })
             .then(response => {
                 if (response.data.success) {
                     setVideos(response.data.videos)
@@ -51,6 +57,8 @@ function LandingPage() {
 
     return (
         <div style={{ width: '85%', margin: '3rem auto' }}>
+            <Title level={4} style={{color: 'gray'}}>이전</Title>
+            <hr />
             <Row gutter={[32, 16]}>
                 {renderCards}
             </Row>
@@ -58,4 +66,4 @@ function LandingPage() {
     )
 }
 
-export default LandingPage
+export default SubscriptionPage

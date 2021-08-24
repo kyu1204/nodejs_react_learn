@@ -1,15 +1,22 @@
 import Axios from 'axios'
 import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 
 function Subscribe(props) {
 
     const [SubscribeNumber, setSubscribeNumber] = useState(0)
     const [Subscribed, setSubscribed] = useState(false)
 
+    const user = useSelector(state => state.user)
+
     useEffect(() => {
+        let userFrom = null
+        if (user.userData.isAuth) {
+            userFrom = user.userData._id
+        }
         let queryParams = {
             userTo: props.userTo,
-            userFrom: localStorage.getItem('userId')
+            userFrom: userFrom
         }
         Axios.get('/api/subscribe/subscribeInfo', { params: queryParams })
             .then(response => {
@@ -18,17 +25,25 @@ function Subscribe(props) {
                     setSubscribed(response.data.subscribed)
                 }
                 else {
-                    alert('구독에 실패하였습니다.')
+                    alert('구독 정보 로딩에 실패하였습니다.')
                 }
             })
 
     }, [])
 
     const onSubscribeClick = () => {
+        let userFrom = null
+        if (user.userData.isAuth) {
+            userFrom = user.userData._id
+        }
 
-        let body = {
+        if (!userFrom) {
+            return window.location.href = '/login'
+        }
+
+        const body = {
             userTo: props.userTo,
-            userFrom: localStorage.getItem('userId'),
+            userFrom: userFrom,
             subscribed: Subscribed
         }
 
