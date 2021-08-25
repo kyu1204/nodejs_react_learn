@@ -25,4 +25,15 @@ router.post('/saveComment', (req, res) => {
 
 })
 
+router.get('/getComments', (req, res) => {
+
+    // 댓글 반환
+    Comment.find({ 'postId': req.query.videoId })
+        .populate('writer')
+        .exec((err, result) => {
+            if (err) return res.status(200).json({ success: false, err })
+            return res.status(200).json({ success: true, result })
+        })
+})
+
 module.exports = router;

@@ -1,28 +1,38 @@
 import React, { useState } from 'react'
 import Axios from 'axios'
 import { useSelector } from 'react-redux'
+import SingleComment from './SingleComment'
 
 function Comment(props) {
     const videoId = props.videoId
     const user = useSelector(state => state.user)
-    const [commentValue, setcommentValue] = useState('')
+    const [CommentValue, setCommentValue] = useState('')
 
     const handleClick = (event) => {
-        setcommentValue(event.currentTarget.value)
+        setCommentValue(event.currentTarget.value)
     }
 
     const onSubmit = (event) => {
         event.preventDefault()
 
+        let writer = null
+        if (user.userData.isAuth) {
+            writer = user.userData._id
+        }
+        else {
+            return window.location.href = '/login'
+        }
+
         const body = {
-            content: commentValue,
-            writer: user.userData._id,
+            content: CommentValue,
+            writer: writer,
             postId: videoId
         }
         Axios.post('/api/comment/saveComment', body)
             .then(response => {
                 if (response.data.success) {
-                    console.log(response.data.result)
+                    setCommentValue('')
+                    props.refreshFunc(response.data.result)
                 }
                 else {
                     alert('댓글 등록에 실패하였습니다.')
@@ -35,20 +45,23 @@ function Comment(props) {
             <br />
             <p>댓글</p>
             <hr />
-
-            {/* Comment Lists */}
-
             {/* Root Comment Form */}
-            <form style={{ display: 'flex' }} onSubmit>
+            <form style={{ display: 'flex' }} onSubmit={onSubmit}>
                 <textarea
                     style={{ width: '100%', borderRadius: '5px' }}
                     placeholder='공개 댓글 추가...'
                     onChange={handleClick}
-                    value={commentValue}
+                    value={CommentValue}
                 />
                 <br />
                 <button style={{ width: '20%', height: '52px' }} onClick={onSubmit}>Submit</button>
             </form>
+
+            {/* Comment Lists */}
+            {props.commentLists && props.commentLists.map((comment, index) => (
+                (!comment.responseTo && <SingleComment refreshFunc={props.refreshFunc} videoId={videoId} comment={comment} />)
+            ))}
+
         </div>
     )
 }

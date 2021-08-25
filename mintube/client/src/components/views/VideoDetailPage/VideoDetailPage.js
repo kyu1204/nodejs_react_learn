@@ -10,8 +10,10 @@ function VideoDetailPage(props) {
     const videoId = props.match.params.videoId
     const queryParams = { videoId: videoId }
 
-    const [VideoDetail, setVideoDetail] = useState([])
     const user = useSelector(state => state.user)
+
+    const [VideoDetail, setVideoDetail] = useState([])
+    const [Comments, setComments] = useState([])
 
     useEffect(() => {
         Axios.get('/api/video/getVideoDetail', { params: queryParams })
@@ -23,7 +25,22 @@ function VideoDetailPage(props) {
                     alert('비디오 정보를 가져오는데 실패하였습니다.')
                 }
             })
+
+        Axios.get('/api/comment/getComments', { params: queryParams })
+            .then(response => {
+                if (response.data.success) {
+                    setComments(response.data.result)
+                }
+                else {
+                    alert('댓글 정보를 가져오는데 실패하였습니다.')
+                }
+            })
+
     }, [])
+
+    const refreshFunc = (newComment) => {
+        setComments(Comments.concat(newComment))
+    }
 
     if (VideoDetail.writer) {
         let subscribeButton
@@ -57,7 +74,7 @@ function VideoDetailPage(props) {
                             </List.Item>
 
                             {/* {Comments} */}
-                            <Comment videoId={videoId} />
+                            <Comment refreshFunc={refreshFunc} commentLists={Comments} videoId={videoId} />
                         </div>
                     </Col>
                     <Col lg={6} xs={24}>
