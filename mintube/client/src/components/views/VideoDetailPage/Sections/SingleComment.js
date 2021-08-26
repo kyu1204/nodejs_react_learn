@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
-import { Comment, Avatar, Button, Input } from 'antd'
+import { Comment, Avatar } from 'antd'
 import Axios from 'axios'
 import { useSelector } from 'react-redux'
 
-const { Textarea } = Input
 
 function SingleComment(props) {
     const videoId = props.videoId
@@ -42,6 +41,7 @@ function SingleComment(props) {
             .then(response => {
                 if (response.data.success) {
                     setCommentValue('')
+                    setOpenReply(!OpenReply)
                     props.refreshFunc(response.data.result)
                 }
                 else {
@@ -66,7 +66,7 @@ function SingleComment(props) {
                 OpenReply &&
                 <form style={{ display: 'flex' }} onSubmit={onSubmit}>
                     <textarea
-                        style={{ width: '100%', borderRadius: '5px' }}
+                        style={{ width: '100%', borderRadius: '5px', marginLeft: '40px'}}
                         onChange={onHandleChange}
                         value={CommentValue}
                     />
