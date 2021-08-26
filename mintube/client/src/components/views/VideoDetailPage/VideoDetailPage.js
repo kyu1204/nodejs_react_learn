@@ -5,6 +5,8 @@ import { useSelector } from 'react-redux'
 import SideVideo from './Sections/SideVideo'
 import Subscribe from './Sections/Subscribe'
 import Comment from './Sections/Comment'
+import LikeDislikes from './Sections/LikeDislikes'
+
 
 function VideoDetailPage(props) {
     const videoId = props.match.params.videoId
@@ -64,7 +66,7 @@ function VideoDetailPage(props) {
                             />
 
                             <List.Item
-                                actions={[subscribeButton]}
+                                actions={[<LikeDislikes video videoId={videoId} user={user} />, subscribeButton]}
                             >
                                 <List.Item.Meta
                                     avatar={<Avatar src={VideoDetail.writer.image} />}
@@ -72,7 +74,7 @@ function VideoDetailPage(props) {
                                     description={VideoDetail.description}
                                 />
                             </List.Item>
-
+                            <hr/>
                             {/* {Comments} */}
                             <Comment refreshFunc={refreshFunc} commentLists={Comments} videoId={videoId} />
                         </div>

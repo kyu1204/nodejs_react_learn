@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Comment, Avatar } from 'antd'
 import Axios from 'axios'
 import { useSelector } from 'react-redux'
+import LikeDislikes from './LikeDislikes'
 
 
 function SingleComment(props) {
@@ -51,6 +52,7 @@ function SingleComment(props) {
     }
 
     const actions = [
+        <LikeDislikes comment commentId={props.comment._id} user={user}/>,
         <span onClick={onClickReply} key='comment-basic-reply-to'>답글</span>
     ]
 

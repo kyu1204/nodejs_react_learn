@@ -46,7 +46,6 @@ function Comment(props) {
         <div>
             <br />
             <p>댓글</p>
-            <hr />
             {/* Root Comment Form */}
             <form style={{ display: 'flex' }} onSubmit={onSubmit}>
                 <textarea

@@ -19,8 +19,8 @@ function NavBar() {
     <nav className="menu" style={{ position: 'fixed', zIndex: 5, width: '100%' }}>
       <div className="menu__logo">
         <a href="/">
-          Logo
-          {/* <img style={{ width: '50%' }} src={`http://localhost:12041/uploads/logo.png`} alt='thumbnail' /> */}
+          {/* Logo */}
+          <img style={{ width: '80%' }} src={`http://localhost:12041/uploads/logo.png`} alt='thumbnail' />
         </a>
       </div>
       <div className="menu__container">

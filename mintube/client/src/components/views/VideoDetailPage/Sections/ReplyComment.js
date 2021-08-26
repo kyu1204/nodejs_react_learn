@@ -39,8 +39,7 @@ function ReplyComment(props) {
 
     return (
         <div>
-            {ChildCommentNumber > 0 &&
-                OpenReplyComment ?
+            {/* {ChildCommentNumber > 0 && OpenReplyComment ?
                 <p style={{ fontSize: '14px', margin: 0, color: '#065fd4', marginLeft: '40px' }} onClick={onClickHandler}>
                     답글 {ChildCommentNumber}개 숨기기
                 </p>
@@ -48,11 +47,22 @@ function ReplyComment(props) {
                 <p style={{ fontSize: '14px', margin: 0, color: '#065fd4', marginLeft: '40px' }} onClick={onClickHandler}>
                     답글 {ChildCommentNumber}개 보기
                 </p>
+            } */}
+            {ChildCommentNumber > 0 &&
+                (OpenReplyComment ?
+                    <p style={{ fontSize: '14px', margin: 0, color: '#065fd4', marginLeft: '40px' }} onClick={onClickHandler}>
+                        답글 {ChildCommentNumber}개 숨기기
+                    </p>
+                    :
+                    <p style={{ fontSize: '14px', margin: 0, color: '#065fd4', marginLeft: '40px' }} onClick={onClickHandler}>
+                        답글 {ChildCommentNumber}개 보기
+                    </p>)
             }
-            {OpenReplyComment &&
+            {
+                OpenReplyComment &&
                 renderReplyComment(props.parentCommentID)
             }
-        </div>
+        </div >
     )
 }
 
