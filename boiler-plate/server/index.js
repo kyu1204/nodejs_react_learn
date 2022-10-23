@@ -73,7 +73,7 @@ app.get('/api/users/auth', auth, (req, res) => {
   // 미들웨어에서 auth 처리, not error, not return -> auth success
   res.status(200).json({
     _id: req.user._id,
-    isAdmin: req.user.role === 0 ? false : true,
+    isAdmin: req.user.role !== 0,
     isAuth: true,
     email: req.user.email,
     name: req.user.name,

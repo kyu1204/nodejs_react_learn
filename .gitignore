@@ -28,3 +28,6 @@ boiler-plate/config/dev.js
 .DS_Store
 mintube/uploads
 mintube/.vscode
+boiler-plate/server/config/dev.js
+boiler-plate/.idea
+boiler-plate/server/config/dev.js

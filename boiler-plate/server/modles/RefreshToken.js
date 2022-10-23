@@ -19,7 +19,7 @@ refreshTokenSchema.statics.findByRefresh = function (token_id, access_token, cb)
         // refresh token verify, pair access token 인지 체크
         jwt.verify(token.token, config.jwtSecret, function (err, refresh_payload) {
             if (err) return cb(err)
-            if (refresh_payload.token != access_token) return cb({ message: 'not match access token' })
+            if (refresh_payload.token !== access_token) return cb({ message: 'not match access token' })
 
             cb(null, token)
         })
